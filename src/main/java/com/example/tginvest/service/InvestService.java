@@ -1,15 +1,23 @@
 package com.example.tginvest.service;
 
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.piapi.contract.v1.LastPrice;
+import ru.tinkoff.piapi.contract.v1.CandleInterval;
 import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.utils.MapperUtils;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -87,4 +95,28 @@ public class InvestService {
                 });
         return res;
     }
+
+    public @NonNull String getSomeCandles() throws ExecutionException, InterruptedException {
+        StringBuilder res = new StringBuilder();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//        readOnlyToken.getMarketDataService().
+        res.append("Цена доллара за последний день с интервалом в час\n");
+        Instant instant1 = Clock.system(ZoneId.of("Europe/Moscow")).instant();
+        Instant instant2 = instant1.minus(1, ChronoUnit.DAYS);
+//        Instant instant3 = instant1.
+        var market = readOnlyToken
+                .getMarketDataService()
+                .getCandles("a22a1263-8e1b-4546-a1aa-416463f104d3",instant2,instant1, CandleInterval.CANDLE_INTERVAL_HOUR);
+        market.get().forEach( e -> {
+
+            Date myDate = Date.from(Instant.ofEpochSecond(e.getTime().getSeconds()));
+
+            res.append(simpleDateFormat.format(myDate) + " ");
+            res.append(decimalFormat.format(MapperUtils.quotationToBigDecimal(e.getClose())) + " RUB");
+            res.append("\n");
+        });
+        return res.toString();
+    }
+
+
 }

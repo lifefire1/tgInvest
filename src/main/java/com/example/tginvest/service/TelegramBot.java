@@ -27,6 +27,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.investService = investService;
         List <BotCommand> listOfCommands = new ArrayList();
         listOfCommands.add(new BotCommand("/invest", "get information"));
+        listOfCommands.add(new BotCommand("/dollar", "dollar chart per day"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException  exception){
@@ -58,6 +59,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage.setText(investService.getInf());
                         execute(sendMessage);
                     } catch (ExecutionException | TelegramApiException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                case "/dollar" -> {
+                    SendMessage sendMessage = new SendMessage();
+                    sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+                    try {
+                        sendMessage.setText(investService.getSomeCandles());
+                        execute(sendMessage);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
