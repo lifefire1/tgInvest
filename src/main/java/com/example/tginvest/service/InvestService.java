@@ -88,11 +88,9 @@ public class InvestService {
 
                     BigDecimal oneHundred = new BigDecimal("100");
                     BigDecimal mult = oneHundred.multiply(newPrice);
-                    log.info(oldPrice.toString());
                     BigDecimal subtract = mult.divide(oldPrice,4);
                     BigDecimal result = oneHundred.subtract(subtract).abs();
 
-//                    log.info(subtract.toString());
                     if (newPrice.compareTo(oldPrice) > 0){
                         res.append(" " + goodTrendSmile + " ")
                                 .append("\n")
