@@ -31,7 +31,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.botConfig = botConfig;
         this.investService = investService;
         this.earlService = earlService;
-        List <BotCommand> listOfCommands = new ArrayList();
+        List <BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/invest", "get information"));
         listOfCommands.add(new BotCommand("/dollar", "dollar chart per day"));
         listOfCommands.add(new BotCommand("/graph", "graph dollar chart per day"));
@@ -79,11 +79,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     try {
 
                         sendDocument.setDocument(new InputFile(earlService.getGraph()));
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
+                    } catch (ExecutionException | IOException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     try {
@@ -100,11 +96,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     try {
                         sendMessage.setText(investService.getSomeCandles());
                         execute(sendMessage);
-                    } catch (TelegramApiException e) {
-                        throw new RuntimeException(e);
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
+                    } catch (TelegramApiException | ExecutionException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }

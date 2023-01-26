@@ -33,7 +33,7 @@ public class EarlService {
 
     private static final Instant instant2 = instant1.minus(1, ChronoUnit.DAYS);
 
-    public TimeSeriesCollection createImageEarl () throws ExecutionException, InterruptedException {
+    private TimeSeriesCollection createImageEarl () throws ExecutionException, InterruptedException {
         TimeSeries s1 = new TimeSeries("график доллара");
         var market = readOnlyToken
                 .getMarketDataService()
