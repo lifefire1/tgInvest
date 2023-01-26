@@ -34,7 +34,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         List <BotCommand> listOfCommands = new ArrayList();
         listOfCommands.add(new BotCommand("/invest", "get information"));
         listOfCommands.add(new BotCommand("/dollar", "dollar chart per day"));
-        listOfCommands.add(new BotCommand("/graphDollar", "graph dollar chart per day"));
+        listOfCommands.add(new BotCommand("/graph", "graph dollar chart per day"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException  exception){
@@ -70,11 +70,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                     }
                 }
 
-                case "/graphDollar" -> {
+                case "/graph" -> {
                     SendMessage sendMessage = new SendMessage();
                     SendDocument sendDocument = new SendDocument();
                     sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                     sendDocument.setChatId(String.valueOf(update.getMessage().getChatId()));
+                    sendMessage.setText("График доллара за последний день с интервалом час");
                     try {
 
                         sendDocument.setDocument(new InputFile(earlService.getGraph()));
@@ -86,7 +87,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         throw new RuntimeException(e);
                     }
                     try {
-//                        execute(sendMessage);
+                        execute(sendMessage);
                         execute(sendDocument);
                     } catch (TelegramApiException e) {
                         throw new RuntimeException(e);

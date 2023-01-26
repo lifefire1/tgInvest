@@ -10,22 +10,16 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.CandleInterval;
-import ru.tinkoff.piapi.contract.v1.HistoricCandle;
 import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.utils.MapperUtils;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -35,14 +29,12 @@ public class EarlService {
 
     private static final InvestApi readOnlyToken = InvestApi.createReadonly(token);
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("###.###");
-    private static Instant instant1 = Clock.system(ZoneId.of("Europe/Moscow")).instant();
+    private static final Instant instant1 = Clock.system(ZoneId.of("Europe/Moscow")).instant();
 
-    private static Instant instant2 = instant1.minus(1, ChronoUnit.DAYS);
+    private static final Instant instant2 = instant1.minus(1, ChronoUnit.DAYS);
 
     public TimeSeriesCollection createImageEarl () throws ExecutionException, InterruptedException {
         TimeSeries s1 = new TimeSeries("график доллара");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         var market = readOnlyToken
                 .getMarketDataService()
                 .getCandles(

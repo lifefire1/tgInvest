@@ -27,10 +27,10 @@ public class InvestService {
     // можно разрешить пользователям вводить свой токен
     private final InvestApi readOnlyToken = InvestApi.createReadonly(token);
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("###.###");
+    private static final DecimalFormat decimalFormat = new DecimalFormat("###.###");
 
-    private static String badTrendSmile = "\uD83D\uDD34";
-    private static String goodTrendSmile = "\uD83D\uDFE2";
+    private static final String badTrendSmile = "\uD83D\uDD34";
+    private static final String goodTrendSmile = "\uD83D\uDFE2";
 
     //TODO
     // Стоит расширить функционал
@@ -44,7 +44,7 @@ public class InvestService {
         return res.toString();
     }
 
-    public static StringBuilder getPrice(
+    public static void getPrice(
             InvestApi readOnlyToken,
             String s,
             StringBuilder res,
@@ -73,8 +73,9 @@ public class InvestService {
                                             )
                                             .get(0)
                                             .getPrice());
-                    res.append(name + " \n");
-                    res.append("Цена на момент открытия " + decimalFormat.format(oldPrice) + " \n")
+                    res.append(name).append(" \n");
+                    //                    .append(t.getFigi())
+                    res.append("Цена на момент открытия ").append(decimalFormat.format(oldPrice)).append(" \n")
 //                    .append(t.getFigi())
                             .append("Последняя цена ")
                             .append(decimalFormat
@@ -82,8 +83,7 @@ public class InvestService {
                                             MapperUtils
                                                     .quotationToBigDecimal(
                                                             e.getPrice()
-                                                    )))
-                            .append(currency + " ");
+                                                    ))).append(currency).append(" ");
 
                     if (newPrice.compareTo(oldPrice) > 0){
                         res.append(" " + goodTrendSmile + " ")
@@ -93,7 +93,6 @@ public class InvestService {
                     }
                 });
         res.append("\n");
-        return res;
     }
 
     public @NonNull String getSomeCandles() throws ExecutionException, InterruptedException {
@@ -111,8 +110,8 @@ public class InvestService {
 
             Date myDate = Date.from(Instant.ofEpochSecond(e.getTime().getSeconds()));
 
-            res.append(simpleDateFormat.format(myDate) + " ");
-            res.append(decimalFormat.format(MapperUtils.quotationToBigDecimal(e.getClose())) + " RUB");
+            res.append(simpleDateFormat.format(myDate)).append(" ");
+            res.append(decimalFormat.format(MapperUtils.quotationToBigDecimal(e.getClose()))).append(" RUB");
             res.append("\n");
         });
         return res.toString();
