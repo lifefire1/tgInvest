@@ -17,7 +17,11 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
-
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.19</version>
+        </dependency>
         <dependency>
             <groupId>ru.tinkoff.piapi</groupId>
             <artifactId>java-sdk-core</artifactId>
