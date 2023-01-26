@@ -9,7 +9,6 @@ import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.utils.MapperUtils;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Instant;
@@ -37,7 +36,7 @@ public class InvestService {
     // Стоит расширить функционал
     public String getInf() throws ExecutionException, InterruptedException {
         StringBuilder res = new StringBuilder();
-        res.append("Добрый день! \nВот ваши отслеживаемые акции\n");
+        res.append("Добрый день! \nВот ваши отслеживаемые акции\n\n");
         getPrice(readOnlyToken,"a22a1263-8e1b-4546-a1aa-416463f104d3",res,"USD","RUB");
         getPrice(readOnlyToken,"BBG000BMHYD1", res, "Jonson & jonson", "$");
         getPrice(readOnlyToken,"BBG000BPH459",res,"Microsoft","$");
@@ -93,6 +92,7 @@ public class InvestService {
                         res.append(" " + badTrendSmile + " ").append("\n");
                     }
                 });
+        res.append("\n");
         return res;
     }
 
