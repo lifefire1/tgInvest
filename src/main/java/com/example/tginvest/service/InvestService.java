@@ -8,6 +8,7 @@ import ru.tinkoff.piapi.contract.v1.CandleInterval;
 import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.utils.MapperUtils;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
@@ -85,11 +86,25 @@ public class InvestService {
                                                             e.getPrice()
                                                     ))).append(currency).append(" ");
 
+                    BigDecimal oneHundred = new BigDecimal("100");
+                    BigDecimal mult = oneHundred.multiply(newPrice);
+                    log.info(oldPrice.toString());
+                    BigDecimal subtract = mult.divide(oldPrice,4);
+                    BigDecimal result = oneHundred.subtract(subtract).abs();
+
+//                    log.info(subtract.toString());
                     if (newPrice.compareTo(oldPrice) > 0){
                         res.append(" " + goodTrendSmile + " ")
-                                .append("\n");
+                                .append("\n")
+                                .append("+ " + decimalFormat.format(result) + " % ")
+                                .append("\n")
+                        ;
                     } else  {
-                        res.append(" " + badTrendSmile + " ").append("\n");
+                        res.append(" " + badTrendSmile + " ")
+                        .append("\n")
+                                .append("- " + decimalFormat.format(result) + " % ")
+                                .append("\n")
+                        ;
                     }
                 });
         res.append("\n");
