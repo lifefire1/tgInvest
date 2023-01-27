@@ -38,7 +38,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/invest", "get information"));
         listOfCommands.add(new BotCommand("/dollar", "dollar chart per day"));
         listOfCommands.add(new BotCommand("/graph", "graph dollar chart per day"));
-        listOfCommands.add(new BotCommand("/news", "news Jonson & Jonson"));
+        listOfCommands.add(new BotCommand("/news", "news of the selected promotion"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException  exception){
