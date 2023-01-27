@@ -26,15 +26,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final EarlService earlService;
 
+    private final NewsService newsService;
+
     @Autowired
-    public TelegramBot(BotConfig botConfig, InvestService investService, EarlService earlService) {
+    public TelegramBot(BotConfig botConfig, InvestService investService, EarlService earlService, NewsService newsService) {
         this.botConfig = botConfig;
         this.investService = investService;
         this.earlService = earlService;
+        this.newsService = newsService;
         List <BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/invest", "get information"));
         listOfCommands.add(new BotCommand("/dollar", "dollar chart per day"));
         listOfCommands.add(new BotCommand("/graph", "graph dollar chart per day"));
+        listOfCommands.add(new BotCommand("/news", "news Jonson & Jonson"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException  exception){
@@ -66,6 +70,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage.setText(investService.getInf());
                         execute(sendMessage);
                     } catch (ExecutionException | TelegramApiException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                case "/news" -> {
+                    SendMessage sendMessage = new SendMessage();
+                    sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+                    try {
+                        for (var t:
+                        newsService.getNews()) {
+                            sendMessage.setText(t.toString());
+                            execute(sendMessage);
+                        }
+
+                    } catch (TelegramApiException e) {
                         throw new RuntimeException(e);
                     }
                 }
